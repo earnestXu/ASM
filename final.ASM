@@ -1,0 +1,304 @@
+;****************宏设置
+SETSCREEN MACRO
+	MOV AH,0
+	MOV AL,12H
+	INT 10H
+ENDM 
+;******************键盘输入选择，返回ASC值in AL
+KEY_INPUT MACRO
+	MOV AH,0CH
+	MOV AH,7
+	MOV BX,128
+	INT 21H
+ENDM
+;******************堆栈段
+STACK SEGMENT PARA STACK 'STACK'
+	DB 250 DUP(?)
+STACK ENDS
+;*******************数据段11
+DATA SEGMENT ;
+	MESG	DB 'CHOOSE WAVE:KEY 1 FOR SINE; KEY 2 FOR TRIANGULAR;KEY ESC FOR EXIT,',0DH,0AH,'$'
+	QUERY	DB 'OK',0DH,0AH,'$'
+	TABLE_OFFSET DW ?
+	PHASE	DW 3
+	TIME	DW 2
+	SINE	DW 0, -2, -4, -6, -8, -10, -12, -14 
+		DW -16, -18, -19, -21, -23, -25, -26, -28
+		DW -29, -31, -32, -34, -35, -36, -37, -38 
+		DW -39, -39, -40, -41, -41, -41, -42, -42 
+		DW -42, -42, -42, -41, -41, -41, -40, -39 
+		DW -39, -38, -37, -36, -35, -34, -32, -31 
+		DW -29, -28, -26, -25, -23, -21, -19, -18 
+		DW -16, -14, -12, -10, -8, -6, -4, -2 
+		DW 0,2,4,6,8,10,12,14 
+		DW 16,18,19,21,23,25,26,28 
+		DW 29,31,32,34,35,36,37,38 
+		DW 39,39,40,41,41,41,42,42 
+		DW 42,42,42,41,41,41,40,39 
+		DW 39,38,37,36,35,34,32,31 
+		DW 29,28,26,25,23,21,19,18 
+		DW 16,14,12,10,8,6,4,2
+		
+		DW 0, -2, -4, -6, -8, -10, -12, -14 
+		DW -16, -18, -19, -21, -23, -25, -26, -28
+		DW -29, -31, -32, -34, -35, -36, -37, -38 
+		DW -39, -39, -40, -41, -41, -41, -42, -42 
+		DW -42, -42, -42, -41, -41, -41, -40, -39 
+		DW -39, -38, -37, -36, -35, -34, -32, -31 
+		DW -29, -28, -26, -25, -23, -21, -19, -18 
+		DW -16, -14, -12, -10, -8, -6, -4, -2 
+		DW 0,2,4,6,8,10,12,14 
+		DW 16,18,19,21,23,25,26,28 
+		DW 29,31,32,34,35,36,37,38 
+		DW 39,39,40,41,41,41,42,42 
+		DW 42,42,42,41,41,41,40,39 
+		DW 39,38,37,36,35,34,32,31 
+		DW 29,28,26,25,23,21,19,18 
+		DW 16,14,12,10,8,6,4,2
+
+		DW 0, -2, -4, -6, -8, -10, -12, -14 
+		DW -16, -18, -19, -21, -23, -25, -26, -28
+		DW -29, -31, -32, -34, -35, -36, -37, -38 
+		DW -39, -39, -40, -41, -41, -41, -42, -42 
+		DW -42, -42, -42, -41, -41, -41, -40, -39 
+		DW -39, -38, -37, -36, -35, -34, -32, -31 
+		DW -29, -28, -26, -25, -23, -21, -19, -18 
+		DW -16, -14, -12, -10, -8, -6, -4, -2 
+		DW 0,2,4,6,8,10,12,14 
+		DW 16,18,19,21,23,25,26,28 
+		DW 29,31,32,34,35,36,37,38 
+		DW 39,39,40,41,41,41,42,42 
+		DW 42,42,42,41,41,41,40,39 
+		DW 39,38,37,36,35,34,32,31 
+		DW 29,28,26,25,23,21,19,18 
+		DW 16,14,12,10,8,6,4,2
+;71
+TRIANGULAR	DW 0, -2, -4, -6, -8, -10, -12, -14, -16, -18, -20 
+		DW -22, -24, -26, -28, -30, -32, -34, -36, -38, -40 
+		DW -42, -44, -46, -48, -50, -48, -46, -44, -42, -40 
+		DW -38, -36, -34, -32, -30, -28, -26, -24, -22, -20
+		DW -18, -16, -14, -12, -10, -8, -6, -4, -2, 0, 2, 4
+		DW 6, 8, 10, 12, 14, 16, 18, 20, 22
+		DW 24, 26, 28, 30, 32, 34, 36, 38, 40
+		DW 42,44, 46, 48, 50, 48, 46, 44, 42, 40 
+		DW 38, 36, 34, 32, 30, 28, 26, 24, 22, 20
+		DW 18, 16, 14, 12, 10, 8, 6, 4, 2
+
+		DW 0, -2, -4, -6, -8, -10, -12, -14, -16, -18, -20 
+		DW -22, -24, -26, -28, -30, -32, -34, -36, -38, -40 
+		DW -42, -44, -46, -48, -50, -48, -46, -44, -42, -40 
+		DW -38, -36, -34, -32, -30, -28, -26, -24, -22, -20
+		DW -18, -16, -14, -12, -10, -8, -6, -4, -2, 0, 2, 4
+		DW 6, 8, 10, 12, 14, 16, 18, 20, 22
+		DW 24, 26, 28, 30, 32, 34, 36, 38, 40
+		DW 42,44, 46, 48, 50, 48, 46, 44, 42, 40 
+		DW 38, 36, 34, 32, 30, 28, 26, 24, 22, 20
+		DW 18, 16, 14, 12, 10, 8, 6, 4, 2	
+
+		DW 0, -2, -4, -6, -8, -10, -12, -14, -16, -18, -20 
+		DW -22, -24, -26, -28, -30, -32, -34, -36, -38, -40 
+		DW -42, -44, -46, -48, -50, -48, -46, -44, -42, -40 
+		DW -38, -36, -34, -32, -30, -28, -26, -24, -22, -20
+		DW -18, -16, -14, -12, -10, -8, -6, -4, -2, 0, 2, 4
+		DW 6, 8, 10, 12, 14, 16, 18, 20, 22
+		DW 24, 26, 28, 30, 32, 34, 36, 38, 40
+		DW 42,44, 46, 48, 50, 48, 46, 44, 42, 40 
+		DW 38, 36, 34, 32, 30, 28, 26, 24, 22, 20
+		DW 18, 16, 14, 12, 10, 8, 6, 4, 2, 0
+DATA ENDS
+;105*******************代码段
+CODE SEGMENT 
+	ASSUME CS:CODE,DS:DATA,SS:STACK
+START:	MOV AX,DATA
+	MOV DS,AX
+	SETSCREEN                            ;屏幕显示方式设置20
+	CALL DRAW_ZUOBIAO	;画坐标轴
+	CALL TEXT_OUTPUT
+LP:	KEY_INPUT
+	CMP AL,'1'	      ;F1
+	JE DRAW_SINE
+	CMP AL,'2'                      ;F2
+	JE DRAW_TRIANGULAR
+	CMP AL,'3'
+	JE CLEAR
+	CMP AL,'4'                      ;ESC
+	JE EXIT
+	CMP AL,'5'
+	JE ADD_PHASE
+	CMP AL,'6'
+	JE SUB_PHASE
+	CMP AL,'7'
+	JE ADD_TIME
+	CMP AL,'8'
+	JE SUB_TIME
+	JMP LP
+
+ADD_PHASE:INC PHASE
+	CALL CLEAR_SCREEN
+	CALL DRAW
+	JMP LP
+
+SUB_PHASE:DEC PHASE
+	CALL CLEAR_SCREEN
+	CALL DRAW
+	JMP LP
+ADD_TIME:INC TIME
+	CALL CLEAR_SCREEN
+	CALL DRAW
+	JMP LP
+
+SUB_TIME:DEC TIME
+	CALL CLEAR_SCREEN
+	CALL DRAW
+	JMP LP
+CLEAR:	CALL CLEAR_SCREEN
+	JMP LP
+
+EXIT:	MOV AH,4CH		;选择退出程序
+	INT 21H
+
+OK:	MOV DX,OFFSET QUERY
+	MOV AH,9
+	INT 21H
+;*****************************画正弦波
+DRAW_SINE:	MOV TABLE_OFFSET,0
+		MOV TABLE_OFFSET,OFFSET SINE
+		CALL DRAW
+		JMP LP
+;*****************************画三角波
+DRAW_TRIANGULAR:	MOV TABLE_OFFSET,0
+			MOV TABLE_OFFSET,OFFSET TRIANGULAR
+			CALL DRAW
+			JMP LP
+;********************************************打点过程
+DRAW PROC NEAR
+	MOV SI,0
+	MOV SI,TABLE_OFFSET
+	MOV CX,320
+	MOV DX,0
+	MOV BX,0
+R_SIDE:	MOV DX,[SI]
+	MOV AX,DX
+	IMUL PHASE
+	MOV DX,AX
+
+	MOV AH,0CH						;50
+	MOV AL,03H                   ;像素的颜色
+	ADD DX,240
+	INT 10H
+	MOV DX,0
+	INC SI
+	INC SI
+	ADD CX,TIME
+        
+	CMP CX,600
+	JL R_SIDE
+	MOV SI,TABLE_OFFSET
+	MOV CX,320
+	MOV DX,0
+	MOV BX,0
+	ADD SI,600
+L_SIDE:	MOV DX,[SI]
+	MOV AX,DX
+	IMUL PHASE
+	MOV DX,AX
+
+	MOV AH,0CH						;50
+	MOV AL,03H                   ;像素的颜色
+	ADD DX,240
+	INT 10H
+	MOV DX,0
+	DEC SI
+	DEC SI
+	SUB CX,TIME
+	CMP CX,70
+	JG L_SIDE
+	RET
+DRAW ENDP
+
+TEXT_OUTPUT PROC NEAR                     ;友好界面文字提示
+	MOV DX,OFFSET MESG
+	MOV AH,9
+	INT 21H
+TEXT_OUTPUT ENDP
+
+DRAW_ZUOBIAO PROC NEAR          ;绘制笛卡尔坐标系
+	MOV CX,0
+	MOV DX,0
+D_HENG:	MOV AH,0CH
+	MOV AL,03H                ;像素的颜色
+	MOV DX,240
+	INT 10H
+	INC CX
+	CMP CX,640
+	JNE D_HENG
+	MOV CX,320
+	MOV DX,0
+D_ZONG:	MOV AH,0CH
+	MOV AL,03H
+	INT 10H
+	INC DX
+	CMP DX,480
+	JNE D_ZONG
+	MOV CX,640
+	MOV DX,240
+HENG_J1:	MOV AH,0CH
+	MOV AL,03H
+	INT 10H
+	SUB CX,2
+	SUB DX,1
+	CMP CX,620
+	JNE HENG_J1   ;像素的颜色 绘制横轴箭头上的颜色
+	MOV CX,640
+	MOV DX,240
+HENG_J2:	MOV AH,0CH                                  ;绘制横轴的箭头
+	MOV AL,03H
+	INT 10H
+	SUB CX,2
+	ADD DX,1
+	CMP CX,620
+	JNE HENG_J2
+	MOV CX,320
+	MOV DX,0
+ZONG_J1:	MOV AH,0CH
+	MOV AL,03H
+	INT 10H
+	SUB CX,1
+	ADD DX,2
+	CMP DX,20
+	JNE ZONG_J1
+	MOV CX,320
+	MOV DX,0
+ZONG_J2:	MOV AH,0CH
+	MOV AL,03H
+	INT 10H
+	ADD CX,1
+	ADD DX,2
+	CMP DX,20
+	JNE ZONG_J2
+	RET
+DRAW_ZUOBIAO ENDP
+
+;*******************************清屏函数
+CLEAR_SCREEN PROC NEAR
+	MOV CX,0
+	MOV DX,0
+	;PUSH AX                             ;???
+CLEAR1:	MOV AH,0CH
+	MOV AL,00H                    ;黑色重新刷屏
+	INT 10H
+	INC CX
+	CMP CX,640
+	JNE CLEAR1
+	MOV CX,0
+	INC DX
+	CMP DX,480
+	JNE CLEAR1
+	CALL DRAW_ZUOBIAO
+	;POP AX
+	RET
+CLEAR_SCREEN ENDP
+;*****************************
+CODE ENDS
+END START
+	
